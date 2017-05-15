@@ -1,5 +1,6 @@
 package com.testing.quartz.listener;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -11,6 +12,8 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.testing.quartz.job.HelloJob;
 
@@ -30,6 +33,10 @@ public class QuartzUnoListaner implements ServletContextListener {
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		try {
+			ServletContext sc = sce.getServletContext();
+			  WebApplicationContext wac = 
+			          WebApplicationContextUtils.getWebApplicationContext(sc);
+			
 			scheduler = new StdSchedulerFactory().getScheduler();
 			// define the job and tie it to our HelloJob class
 			JobDetail job = JobBuilder.newJob(HelloJob.class).withIdentity("CronQuartzJob", "Group").build();
